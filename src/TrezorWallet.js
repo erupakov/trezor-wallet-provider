@@ -18,6 +18,7 @@ const defaultAddress = [
 	0
 ];
 const deviceList = new trezor.DeviceList();
+let wallets = [];
 
 export default class TrezorWallet {
   constructor(networkId, accountsOffset = 0, accountsQuantity = 6, eventEmitter) {
@@ -28,10 +29,17 @@ export default class TrezorWallet {
     this.accountsQuantity = accountsQuantity;
     this.eventEmitter = eventEmitter;
     this.wallets = [];
-  }
+	}
+	
+	_addHexPrefix(val) {
+    if (typeof val !== 'string') {
+      return val;
+    }
+    return val.substring(0, 2) === hexPrefix ? val : hexPrefix + val;
+  };
 
   _getAccountIndex(address) {
-    return this.wallets.filter(wallet => {
+    return wallets.filter(wallet => {
       return wallet.address === address
     })[0].index;
   }
@@ -95,21 +103,21 @@ export default class TrezorWallet {
     const accountIndex = this._getAccountIndex(txData.from);
 
 		Object.keys(txData).forEach(key => {
-			let val = txData[key];
+			let val = txData[key] + '';
 			val = val.replace(hexPrefix, '').toLowerCase();
 			txData[key] = val.length % 2 !== 0 ? `0${val}` : val;
 		});
 
-		let session = await _getCurrentSession();
+		let session = await this._getCurrentSession();
 		let signPromise = session.signEthTx(
-			_getAddressByIndex(accountIndex),
+			this._getAddressByIndex(accountIndex),
 			txData.nonce,
 			txData.gasPrice,
 			txData.gasLimit,
 			txData.to,
 			txData.value,
 			txData.data,
-			chainId
+			this.networkId
 		);
 
 		let signed = null;
@@ -123,9 +131,9 @@ export default class TrezorWallet {
 		}
 
 		const signedTx = new EthereumTx({
-			s: addHexPrefix(signed.s),
-			v: addHexPrefix(new BigNumber(signed.v).toString(16)),
-			r: addHexPrefix(signed.r.toString()),
+			s: this._addHexPrefix(signed.s),
+			v: this._addHexPrefix(new BigNumber(signed.v).toString(16)),
+			r: this._addHexPrefix(signed.r.toString()),
 			...args.dataToSign
 		});
 		return {
@@ -154,19 +162,19 @@ export default class TrezorWallet {
 			hdk.publicKey = Buffer.from(publicKey, 'hex');
 			hdk.chainCode = Buffer.from(chainCode, 'hex');
 			let pathBase = 'm';
-			let wallets = [];
+			let newWallets = [];
 			let addresses = [];
 			for (let i = 0; i < this.accountsQuantity; i++) {
 				const index = i + this.accountsOffset;
 				const dkey = hdk.derive(`${pathBase}/${index}`);
 				const address = `0x${publicToAddress(dkey.publicKey, true).toString('hex')}`;
 				addresses.push(address);
-				wallets.push({
+				newWallets.push({
 					address,
 					index
 				});
 			}
-			this.wallets = wallets;
+			wallets = newWallets;
 			callback(null, addresses);
 		} catch (error) {
 			callback(error, null);
