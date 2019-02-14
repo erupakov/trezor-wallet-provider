@@ -28,7 +28,6 @@ export default class TrezorWallet {
     this.accountsOffset = accountsOffset;
     this.accountsQuantity = accountsQuantity;
     this.eventEmitter = eventEmitter;
-    this.wallets = [];
 	}
 	
 	_addHexPrefix(val) {
@@ -134,7 +133,7 @@ export default class TrezorWallet {
 			s: this._addHexPrefix(signed.s),
 			v: this._addHexPrefix(new BigNumber(signed.v).toString(16)),
 			r: this._addHexPrefix(signed.r.toString()),
-			...args.dataToSign
+			...txData.data
 		});
 		return {
 			raw: hexPrefix + signedTx.serialize().toString('hex')
