@@ -7,6 +7,7 @@ const trezor = require('trezor.js');
 
 let currentSession = null;
 let currentDevice = null;
+const hexPrefix = '0x';
 const CUSTOM_TIME_OUT = 30000;
 
 const hardeningConstant = 0x80000000;
