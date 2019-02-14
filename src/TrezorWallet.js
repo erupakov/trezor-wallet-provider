@@ -92,7 +92,7 @@ export default class TrezorWallet {
 	}
 
   async signTransactionAsync(txData) {
-    const accountIndex = this.getAccountIndex(txData.from);
+    const accountIndex = this._getAccountIndex(txData.from);
 
 		Object.keys(txData).forEach(key => {
 			let val = txData[key];
