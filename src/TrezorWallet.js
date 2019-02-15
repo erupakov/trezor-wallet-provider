@@ -3,8 +3,6 @@ import { publicToAddress } from 'ethereumjs-util';
 import BigNumber from 'bignumber.js';
 import { timeout, TimeoutError } from 'promise-timeout';
 import HDKey from 'hdkey';
-import EthUnits from './util/eth-units';
-import EthUtils from './util/eth-utils';
 
 const trezor = require('trezor.js');
 
@@ -101,19 +99,10 @@ export default class TrezorWallet {
 		return currentSession;
 	}
 
-	_formatTxData(txData) {
-		return {
-			nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(txData.nonce)),
-			gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(EthUnits.unitToUnit(txData.gasPrice, 'gwei', 'wei'))),
-			gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(txData.gasLimit)),
-			to: EthUtils.sanitizeHex(txData.to),
-			value: EthUtils.sanitizeHex(EthUtils.decimalToHex(EthUnits.unitToUnit(txData.value, 'ether', 'wei')))
-		}
-	}
-
   async signTransactionAsync(txData) {
     const accountIndex = this._getAccountIndex(txData.from);
-		const txDataFormatted = this._formatTxData(txData);
+		const txDataFormatted = {...txData};
+		txDataFormatted.gasLimit = new BigNumber(txDataFormatted.gasLimit).toString(16);
 
 		const txDataClone = {...txDataFormatted};
 
