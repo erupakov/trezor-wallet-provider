@@ -3,6 +3,9 @@ import { publicToAddress } from 'ethereumjs-util';
 import BigNumber from 'bignumber.js';
 import { timeout, TimeoutError } from 'promise-timeout';
 import HDKey from 'hdkey';
+import EthUnits from './util/eth-units';
+import EthUtils from './util/eth-utils';
+
 const trezor = require('trezor.js');
 
 let currentSession = null;
@@ -98,24 +101,37 @@ export default class TrezorWallet {
 		return currentSession;
 	}
 
+	_formatTxData(txData) {
+		return {
+			nonce: EthUtils.sanitizeHex(EthUtils.decimalToHex(txData.nonce)),
+			gasPrice: EthUtils.sanitizeHex(EthUtils.decimalToHex(EthUnits.unitToUnit(txData.gasPrice, 'gwei', 'wei'))),
+			gasLimit: EthUtils.sanitizeHex(EthUtils.decimalToHex(txData.gasLimit)),
+			to: EthUtils.sanitizeHex(txData.to),
+			value: EthUtils.sanitizeHex(EthUtils.decimalToHex(EthUnits.unitToUnit(txData.value, 'ether', 'wei')))
+		}
+	}
+
   async signTransactionAsync(txData) {
     const accountIndex = this._getAccountIndex(txData.from);
+		const txDataFormatted =  this._formatTxData(txData);
 
-		Object.keys(txData).forEach(key => {
-			let val = txData[key] + '';
+		const txDataClone = {...txDataFormatted};
+
+		Object.keys(txDataClone).forEach(key => {
+			let val = txDataClone[key];
 			val = val.replace(hexPrefix, '').toLowerCase();
-			txData[key] = val.length % 2 !== 0 ? `0${val}` : val;
+			txDataClone[key] = val.length % 2 !== 0 ? `0${val}` : val;
 		});
 
 		let session = await this._getCurrentSession();
 		let signPromise = session.signEthTx(
 			this._getAddressByIndex(accountIndex),
-			txData.nonce,
-			txData.gasPrice,
-			txData.gasLimit,
-			txData.to,
-			txData.value,
-			txData.data,
+			txDataClone.nonce,
+			txDataClone.gasPrice,
+			txDataClone.gasLimit,
+			txDataClone.to,
+			txDataClone.value,
+			txDataClone.data,
 			this.networkId
 		);
 
@@ -133,7 +149,7 @@ export default class TrezorWallet {
 			s: this._addHexPrefix(signed.s),
 			v: this._addHexPrefix(new BigNumber(signed.v).toString(16)),
 			r: this._addHexPrefix(signed.r.toString()),
-			...txData.data
+			...txDataFormatted
 		});
 		return {
 			raw: hexPrefix + signedTx.serialize().toString('hex')
