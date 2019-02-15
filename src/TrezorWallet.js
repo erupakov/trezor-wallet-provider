@@ -113,7 +113,7 @@ export default class TrezorWallet {
 
   async signTransactionAsync(txData) {
     const accountIndex = this._getAccountIndex(txData.from);
-		const txDataFormatted =  this._formatTxData(txData);
+		const txDataFormatted = this._formatTxData(txData);
 
 		const txDataClone = {...txDataFormatted};
 
@@ -151,9 +151,7 @@ export default class TrezorWallet {
 			r: this._addHexPrefix(signed.r.toString()),
 			...txDataFormatted
 		});
-		return {
-			raw: hexPrefix + signedTx.serialize().toString('hex')
-		};
+		return hexPrefix + signedTx.serialize().toString('hex');
   }
 
   /**
