@@ -194,23 +194,13 @@ export default class TrezorWallet {
       .catch(err => callback(err, null));
 	}
 	
-	async getPublicKey(address, callback) {
-		try {
+	async getPublicKey(address) {
 			const session = await this._getCurrentSession();
-			const publickKey = await session.getPublicKey(address, 'ethereum');
-			callback(null, publickKey)
-		} catch (error) {
-			callback(error, null)
-		}
+			return session.getPublicKey(address, 'ethereum');
 	}
 
-	async signPersonalMessage(address, message, callback) {
-		try {
+	async signPersonalMessage(address, message) {
 			const session = await this._getCurrentSession();
-			const signature = await session.signEthMessage(address, message);
-			callback(null, signature)
-		} catch (error) {
-			callback(error, null)
-		}
+			return session.signEthMessage(address, message);
 	}
 }
