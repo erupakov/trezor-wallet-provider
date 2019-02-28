@@ -58,7 +58,7 @@ function HookedWalletSubprovider(opts){
 
     // data lookup
     if (opts.getAccounts) self.getAccounts = opts.getAccounts
-    if (opts.getPublicKey) self.getPublicKey = opts.getPublicKey
+    if (opts.getPublicKey) self.getPublicKey = address => opts.getPublicKey(address);
     // high level override
     if (opts.processTransaction) self.processTransaction = opts.processTransaction
     if (opts.processMessage) self.processMessage = opts.processMessage
@@ -72,7 +72,7 @@ function HookedWalletSubprovider(opts){
     // actually perform the signature
     if (opts.signTransaction) self.signTransaction = opts.signTransaction  || mustProvideInConstructor('signTransaction')
     if (opts.signMessage) self.signMessage = opts.signMessage  || mustProvideInConstructor('signMessage')
-    if (opts.signPersonalMessage) self.signPersonalMessage = opts.signPersonalMessage  || mustProvideInConstructor('signPersonalMessage')
+    if (opts.signPersonalMessage) self.signPersonalMessage = (address, message) => opts.signPersonalMessage(address, message) || mustProvideInConstructor('signPersonalMessage')
     if (opts.signTypedMessage) self.signTypedMessage = opts.signTypedMessage  || mustProvideInConstructor('signTypedMessage')
     if (opts.recoverPersonalSignature) self.recoverPersonalSignature = opts.recoverPersonalSignature
     // publish to network
@@ -244,10 +244,6 @@ HookedWalletSubprovider.prototype.handleRequest = function(payload, next, end){
 //
 
 HookedWalletSubprovider.prototype.getAccounts = function(cb) {
-    cb(null, [])
-}
-
-HookedWalletSubprovider.prototype.getPublicKey = function(cb) {
     cb(null, [])
 }
 

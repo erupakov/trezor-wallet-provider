@@ -195,12 +195,15 @@ export default class TrezorWallet {
 	}
 	
 	async getPublicKey(address) {
-			const session = await this._getCurrentSession();
-			return session.getPublicKey(address, 'ethereum');
-	}
+    const accountIndex = this._getAccountIndex(address);
+    const session = await this._getCurrentSession();
+    let result = await session.typedCall('GetPublicKey', 'PublicKey', { address_n: this._getAddressByIndex(accountIndex) });
+    return result.message.node.public_key;
+  }
 
-	async signPersonalMessage(address, message) {
-			const session = await this._getCurrentSession();
-			return session.signEthMessage(address, message);
-	}
+  async signPersonalMessage(address, message) {
+    const accountIndex = this._getAccountIndex(address);
+    const session = await this._getCurrentSession();
+    return session.signEthMessage(this._getAddressByIndex(accountIndex), message);
+  }
 }
