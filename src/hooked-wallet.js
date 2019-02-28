@@ -58,6 +58,7 @@ function HookedWalletSubprovider(opts){
 
     // data lookup
     if (opts.getAccounts) self.getAccounts = opts.getAccounts
+    if (opts.getPublicKey) self.getPublicKey = opts.getPublicKey
     // high level override
     if (opts.processTransaction) self.processTransaction = opts.processTransaction
     if (opts.processMessage) self.processMessage = opts.processMessage
@@ -246,6 +247,9 @@ HookedWalletSubprovider.prototype.getAccounts = function(cb) {
     cb(null, [])
 }
 
+HookedWalletSubprovider.prototype.getPublicKey = function(cb) {
+    cb(null, [])
+}
 
 //
 // "process" high level flow
