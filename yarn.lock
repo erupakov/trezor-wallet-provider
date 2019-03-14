@@ -847,10 +847,10 @@ bitcoin-script@^0.1.1:
     sha1 "^1.1.0"
     sha256 "^0.1.1"
 
-bitcoinjs-lib-zcash@^3.5.2:
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/bitcoinjs-lib-zcash/-/bitcoinjs-lib-zcash-3.5.3.tgz#19c74f36a2f9b0bd6680a02087567db8454639e5"
-  integrity sha512-F2QfhMV/M+8ffWlm01LTQFn6r9NxhqsuQDWC/BNrsbOZMZMrVQvBI+AjH5u+qkSOBl3DubVSXluIZVSKcELA6A==
+bitcoinjs-lib-zcash@^3.6.1:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/bitcoinjs-lib-zcash/-/bitcoinjs-lib-zcash-3.6.1.tgz#563fe1a4c7255aa1bf07bb0904ec1de072cbc098"
+  integrity sha512-p09YKY2l0sNf1LjJOO82s4tgxLNdNTwOMN1yRzFm3ozGC87Odx1iq8vD6XTBs/g3nAOsXlmD2VJc2hHCHyH7xg==
   dependencies:
     bech32 "^1.1.2"
     bigi "^1.4.0"
@@ -866,7 +866,7 @@ bitcoinjs-lib-zcash@^3.5.2:
     pushdata-bitcoin "^1.0.1"
     randombytes "^2.0.1"
     safe-buffer "^5.0.1"
-    typeforce "^1.11.3"
+    typeforce "1.11.3"
     varuint-bitcoin "^1.0.4"
     wif "^2.0.1"
 
@@ -3217,13 +3217,13 @@ trezor-link@1.6.0:
     semver-compare "^1.0.0"
     whatwg-fetch "0.11.0"
 
-trezor.js@6.19.0:
-  version "6.19.0"
-  resolved "https://registry.yarnpkg.com/trezor.js/-/trezor.js-6.19.0.tgz#f71b0ca7c64acc631dcf3c6d34d59a4b4dc19369"
-  integrity sha512-LmsqUWya1psbON2s4ym8CXGVpASIsCXTIS8v1LTUKMXlNQ1uJnFsqt8FadwQ2Q1pX3TYyZS1kHYntT8+Zfe+wg==
+trezor.js@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/trezor.js/-/trezor.js-8.1.0.tgz#c93386ff170825d172a729dca82ea928511288c2"
+  integrity sha512-yDpY3hHHFw8b0yFot3hsYKGWPdghrm28Ztz6nwqnKifFojvNh2FaBDJEG6xrr7ef0nhUutmR3SXWca+9V5JPGg==
   dependencies:
     bchaddrjs "^0.2.1"
-    bitcoinjs-lib-zcash "^3.5.2"
+    bitcoinjs-lib-zcash "^3.6.1"
     ecurve "^1.0.2"
     node-fetch "^1.6.0"
     randombytes "^2.0.1"
@@ -3237,10 +3237,12 @@ trim-right@^1.0.1:
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
   integrity sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM=
 
-typeforce@^1.11.3:
-  version "1.18.0"
-  resolved "https://registry.yarnpkg.com/typeforce/-/typeforce-1.18.0.tgz#d7416a2c5845e085034d70fcc5b6cc4a90edbfdc"
-  integrity sha512-7uc1O8h1M1g0rArakJdf0uLRSSgFcYexrVoKo+bzJd32gd4gDy2L/Z+8/FjPnU9ydY3pEnVPtr9FyscYY60K1g==
+typeforce@1.11.3:
+  version "1.11.3"
+  resolved "https://registry.yarnpkg.com/typeforce/-/typeforce-1.11.3.tgz#a54d0ff58808788fba358020982270bd6995d8e4"
+  integrity sha512-+vllWbxe1AKLkO3KNyZPjb51NRHwRE/8bAi/cmF6TK24VqrPiQPRiHrFV19j1xHxxCHQbIvN4Zfco+skuiXSWQ==
+  dependencies:
+    inherits "^2.0.1"
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
