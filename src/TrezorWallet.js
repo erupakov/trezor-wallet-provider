@@ -3,11 +3,8 @@ import { publicToAddress } from 'ethereumjs-util';
 import BigNumber from 'bignumber.js';
 import { timeout, TimeoutError } from 'promise-timeout';
 import HDKey from 'hdkey';
+import TrezorConnect from 'trezor-connect';
 
-const trezor = require('trezor.js');
-
-let currentSession = null;
-let currentDevice = null;
 const hexPrefix = '0x';
 const CUSTOM_TIME_OUT = 30000;
 
@@ -15,7 +12,7 @@ const hardeningConstant = 0x80000000;
 const defaultAddress = [
 	(44 | hardeningConstant) >>> 0,
 	(60 | hardeningConstant) >>> 0,
-	(0 | hardeningConstant) >>> 0,
+	(0 | hardeningConstant) >
 	0
 ];
 const deviceList = new trezor.DeviceList();
@@ -66,39 +63,6 @@ export default class TrezorWallet {
 		this.eventEmitter.emit('TREZOR_PASSPHRASE_REQUEST');
 	}
 
-	async _getCurrentSession() {
-		if (!deviceList.transport) {
-			throw new Error('TREZOR_BRIDGE_NOT_FOUND');
-		}
-
-		if (currentSession) {
-			return currentSession;
-		}
-		if (currentDevice) {
-			await currentDevice.steal();
-		}
-
-		const { device, session } = await deviceList.acquireFirstDevice(true);
-
-		device.on('disconnect', () => {
-			currentDevice = null;
-			currentSession = null;
-		});
-		device.on('changedSessions', (isUsed, isUsedHere) => {
-			if (isUsedHere) {
-				currentSession = null;
-			}
-		});
-
-		device.on('pin', this._pinCallback.bind(this));
-    device.on('passphrase', this._passphraseCallback.bind(this));
-    
-		currentDevice = device;
-		currentSession = session;
-
-		return currentSession;
-	}
-
   async signTransactionAsync(txData) {
     const accountIndex = this._getAccountIndex(txData.from);
 		const txDataFormatted = {...txData};
@@ -112,8 +76,7 @@ export default class TrezorWallet {
 			txDataClone[key] = val.length % 2 !== 0 ? `0${val}` : val;
 		});
 
-		let session = await this._getCurrentSession();
-		let signPromise = session.signEthTx(
+		let signPromise = TrezorConnect.ethereumSignTx(
 			this._getAddressByIndex(accountIndex),
 			txDataClone.nonce,
 			txDataClone.gasPrice,
