@@ -1,12 +1,7 @@
 {
-  "presets": [
-    ["env", {
-      "include": ["transform-regenerator"],
-      "targets": {
-        "browsers": ["last 2 versions"],
-        "node": "6.12"
-      }
-    }]
-  ],
-  "plugins": ["transform-runtime"]
+  "presets": [["@babel/preset-env", {
+    "targets": {
+      "node": "current"
+    }
+  }]]
 }
