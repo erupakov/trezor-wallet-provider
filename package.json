@@ -1,6 +1,6 @@
 {
   "name": "trezor-wallet-provider",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Trezor wallet provider for the Web3 ProviderEngine",
   "main": "lib/index.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HartgerV/trezor-wallet-provider.git"
+    "url": "git+https://github.com/erupakov/trezor-wallet-provider.git"
   },
-  "author": "Hartger Veeman @ Divisions",
+  "author": "Hartger Veeman @ Divisions, Eugene Rupakov",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/HartgerV/trezor-wallet-provider/issues"
+    "url": "https://github.com/erupakov/trezor-wallet-provider/issues"
   },
-  "homepage": "https://github.com/HartgerV/trezor-wallet-provider#readme",
+  "homepage": "https://github.com/erupakov/trezor-wallet-provider#readme",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",

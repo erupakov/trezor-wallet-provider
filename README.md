@@ -1,6 +1,8 @@
 # trezor-wallet-provider
 Trezor wallet provider for the Web3 ProviderEngine, based on [ledger-wallet-provider](https://github.com/Neufund/ledger-wallet-provider) by Neufund.
 
+This is an adaptation of Hartger Veeman's provider (v4 Trezor software derivation) to current version 7 of Trezor Connect software.
+
 # Installation
 
 ```
