@@ -3,6 +3,9 @@ Trezor wallet provider for the Web3 ProviderEngine, based on [ledger-wallet-prov
 
 This is an adaptation of Hartger Veeman's provider (v4 Trezor software derivation) to current version 7 of Trezor Connect software.
 
+The solution still uses both trezor.js (old implementation ot Trezor software) and new Trezor Connect software (newest implementation). 
+This ambiguity is planned to abandon completely in v0.3 of the provider removing trezor.js hooks.
+
 # Installation
 
 ```
